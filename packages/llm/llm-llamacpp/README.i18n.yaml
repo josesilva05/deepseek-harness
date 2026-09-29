@@ -1,6 +1,34 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write packages/llm/llm-llamacpp/README.md
-README.md: 608121f9b055d31be5e4779fdc820642c3e4d093
-README.zh.md: fda65b77f8ae57876d213ed4810c2684d65ba542
+/deepseek-ai-dsh-llm-llamacpp:
+  en: 0c56a9a9ca792eed
+  zh: 45e8f460c316b1e5
+/deepseek-ai-dsh-llm-llamacpp/install:
+  en: ad5d4ff873b656f0
+  zh: e2c459c703dc566d
+/deepseek-ai-dsh-llm-llamacpp/configuration:
+  en: f19847c395da948c
+  zh: 5a636eebd2e69e1c
+/deepseek-ai-dsh-llm-llamacpp/behavior:
+  en: a241413712e7b9fa
+  zh: 21ffe1b4e3d3b3df
+/deepseek-ai-dsh-llm-llamacpp/model-experience:
+  en: 215e7ba838619b7b
+  zh: 215e7ba838619b7b
+/deepseek-ai-dsh-llm-llamacpp/model-experience/requests-to-the-served-model:
+  en: b3d684962ac8eddd
+  zh: 1bb43e70857e6bef
+/deepseek-ai-dsh-llm-llamacpp/model-experience/requests-to-the-served-model/what-the-model-sees:
+  en: 7597c56b050d42ee
+  zh: b12aa44d62f1f984
+/deepseek-ai-dsh-llm-llamacpp/model-experience/requests-to-the-served-model/token-effect:
+  en: c00e495ecc91bddd
+  zh: ed3773054e5c922a
+/deepseek-ai-dsh-llm-llamacpp/model-experience/requests-to-the-served-model/kv-cache-effect:
+  en: 032d76818dadf874
+  zh: fa42939485c4ce69
+/deepseek-ai-dsh-llm-llamacpp/known-limitations-and-deferred-work:
+  en: d3267118ff6a96bd
+  zh: 74336c65eb23d4b7

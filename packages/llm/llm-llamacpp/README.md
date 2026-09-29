@@ -20,7 +20,7 @@ Select `llamacpp/loaded` as the model. Pair it with [`dsh-command-llamacpp`](../
 | --- | --- | --- |
 | `route` | `llamacpp` | Provider route this plugin registers. |
 | `displayName` | `llama.cpp` | Route name shown by selectors. |
-| `baseURL` | `http://127.0.0.1:8080` | Server origin without `/v1`; http or https. |
+| `baseURL` | `http://127.0.0.1:8080` | Server origin without `/v1`; http or https. The bundle patch reads `LLAMACPP_BASE_URL` first, so a launcher can point the harness at the server it started. |
 | `apiKey` | — | Bearer token for a server started with `--api-key`; without it a fixed placeholder is sent. |
 | `probeTimeoutMs` | `5000` | Upper bound for one `GET /props` probe. |
 | `maxTokens` | `32768` | Output cap for a request that names none; clamped to the served context window. |

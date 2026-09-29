@@ -20,7 +20,7 @@ dsh plugin --profile web add ./packages/llm/llm-llamacpp
 | --- | --- | --- |
 | `route` | `llamacpp` | 插件注册的提供方路由。 |
 | `displayName` | `llama.cpp` | 选择器中显示的路由名称。 |
-| `baseURL` | `http://127.0.0.1:8080` | 不含 `/v1` 的服务器地址；http 或 https。 |
+| `baseURL` | `http://127.0.0.1:8080` | 不含 `/v1` 的服务器地址；http 或 https。Bundle 补丁优先读取 `LLAMACPP_BASE_URL`，启动器可借此让 harness 指向它启动的服务器。 |
 | `apiKey` | — | 以 `--api-key` 启动的服务器所需的 Bearer 令牌；未配置时发送固定占位值。 |
 | `probeTimeoutMs` | `5000` | 单次 `GET /props` 探测的上限。 |
 | `maxTokens` | `32768` | 请求未指定时的输出上限；不超过服务器的上下文窗口。 |
