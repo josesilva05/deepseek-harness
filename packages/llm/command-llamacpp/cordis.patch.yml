@@ -1,0 +1,5 @@
+# Optional Profile Bundle: the /llamacpp status command for the route that
+# @deepseek-ai/dsh-llm-llamacpp registers.
+- insert:
+    - id: command-llamacpp
+      name: '@deepseek-ai/dsh-command-llamacpp'
