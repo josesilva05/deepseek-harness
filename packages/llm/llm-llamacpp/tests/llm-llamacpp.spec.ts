@@ -74,8 +74,11 @@ function adapterFor(baseURL: string, overrides: Partial<Config> = {}): LlamaCppA
   })
 }
 
+let messageCount = 0
+
 function userMessage(text: string): Message {
-  return { id: MessageId(crypto.randomUUID()), role: 'user', content: [{ type: 'text', text }], source: { kind: 'user' } }
+  messageCount += 1
+  return { id: MessageId(`m-${String(messageCount)}`), role: 'user', content: [{ type: 'text', text }], source: { kind: 'user' } }
 }
 
 /** Schema-validate a partial config; omitted fields take their defaults. */

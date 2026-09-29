@@ -126,6 +126,8 @@ export class LlamaCppAdapter extends LlmAdapter {
       requestImageMaxBytes: config.requestImageMaxBytes,
       retryPolicy: config.retryPolicy,
       configuredMaxTokens: new Map([[LOADED_MODEL_ID, maxTokens]]),
+      // The one model is built from a validated probe, so it has no failure to report.
+      modelErrors: new Map(),
       piProvider: createProvider({
         id: config.route,
         name: config.displayName,
