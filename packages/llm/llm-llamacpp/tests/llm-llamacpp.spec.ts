@@ -69,13 +69,18 @@ async function fakeServer(initial: unknown): Promise<FakeServer> {
 
 function adapterFor(baseURL: string, overrides: Partial<Config> = {}): LlamaCppAdapter {
   return new LlamaCppAdapter({
-    config: resolveConfig(Config({ baseURL, ...overrides })),
+    config: resolveConfig(configOf({ baseURL, ...overrides })),
     resolveAttachments: () => undefined,
   })
 }
 
 function userMessage(text: string): Message {
   return { id: MessageId(crypto.randomUUID()), role: 'user', content: [{ type: 'text', text }], source: { kind: 'user' } }
+}
+
+/** Schema-validate a partial config; omitted fields take their defaults. */
+function configOf(input: Partial<Config>): Config {
+  return Config(input as Config)
 }
 
 async function collect(stream: AsyncIterable<StreamChunk>): Promise<StreamChunk[]> {
@@ -180,7 +185,7 @@ describe('LlamaCppAdapter', () => {
 
 describe('resolveConfig', () => {
   it('normalizes the base URL and rejects non-http schemes', () => {
-    expect(resolveConfig(Config({ baseURL: 'http://127.0.0.1:8080/' })).baseURL).toBe('http://127.0.0.1:8080')
-    expect(() => resolveConfig(Config({ baseURL: 'file:///tmp' }))).toThrow(/http or https/)
+    expect(resolveConfig(configOf({ baseURL: 'http://127.0.0.1:8080/' })).baseURL).toBe('http://127.0.0.1:8080')
+    expect(() => resolveConfig(configOf({ baseURL: 'file:///tmp' }))).toThrow(/http or https/)
   })
 })
