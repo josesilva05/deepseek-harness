@@ -7,7 +7,7 @@ kind: "package-reference"
 
 [English](README.md) | 中文
 
-## 摘要
+## 概述
 
 该提供方在 Host CPU 上通过 sherpa-onnx 使用 Whisper small（ONNX 编码器与解码器）和 Silero VAD 识别语音。它用于覆盖 SenseVoice 不支持的语言；语言提示为 `pt`、`en` 与 `auto`。激活时只检查已缓存的资源，不加载模型、不下载文件。
 
@@ -15,10 +15,10 @@ kind: "package-reference"
 
 - [使用本包](#use-this-package)
 - [理解实现](#understand-the-implementation)
-- [延伸阅读](#further-exploration)
-- [Model Experience](#model-experience)
-- [Known Limitations and Deferred Work](#known-limitations-and-deferred-work)
-- [Dev Note](#dev-note)
+- [进一步探索](#further-exploration)
+- [模型体验](#model-experience)
+- [已知限制与延期工作](#known-limitations-and-deferred-work)
+- [开发备注](#dev-note)
 
 -----
 
@@ -46,30 +46,30 @@ kind: "package-reference"
 -----
 
 <a id="further-exploration"></a>
-## 延伸阅读
+## 进一步探索
 
 [语音输入子系统](../../../docs/subsystems/voice-input.zh.md)
 
 -----
 
 <a id="model-experience"></a>
-## Model Experience
+## 模型体验
 
 ### 本地语音识别
 
-#### What the model sees
+#### 模型看到什么
 
 无：录音、`pt` 语言提示与准备状态都不进入模型请求；转写结果插入未发送的草稿，之后的文本由用户正常提交决定。
 
-#### Token effect
+#### Token 影响
 
 零；识别不增加任何模型 token。
 
-#### KV Cache effect
+#### KV Cache 影响
 
 与模型请求无关；识别不改变任何请求前缀。
 
-## Known Limitations and Deferred Work
+## 已知限制与延期工作
 
 <a id="known-limitations-and-deferred-work"></a>
 
@@ -78,7 +78,7 @@ kind: "package-reference"
 -----
 
 <a id="dev-note"></a>
-### Dev Note
+### 开发备注
 
 <details>
 <summary>维护者细节 — 点击展开</summary>

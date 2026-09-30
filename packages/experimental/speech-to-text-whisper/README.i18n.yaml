@@ -10,10 +10,10 @@
   zh: a2c72e2a1ceab37b
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/summary:
   en: db36bf03bfa1cd1f
-  zh: b441d7bcbfd14901
+  zh: e2cff5d70ede389f
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/table-of-contents:
   en: d152484eb41ac6b4
-  zh: 126ca34339127fcd
+  zh: 09388d293f9be9cb
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/use-this-package:
   en: 1789372a08268549
   zh: ac2c945998f2d8d6
@@ -22,25 +22,25 @@
   zh: bd64cb2c2f1c1e69
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/further-exploration:
   en: 5c64426add9d79d6
-  zh: 99377578e7b7c1ed
+  zh: 4e06aa2ead8d2ccd
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/model-experience:
   en: 215e7ba838619b7b
-  zh: 215e7ba838619b7b
+  zh: a311da3843709f90
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/model-experience/local-speech-recognition:
   en: 5aaac77504fd17c7
   zh: 0f2e89df0914390e
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/model-experience/local-speech-recognition/what-the-model-sees:
   en: 5ddc752ef983486e
-  zh: b82608e96fec8048
+  zh: 396dcf24220862d0
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/model-experience/local-speech-recognition/token-effect:
   en: 2fe8305d66a1107f
-  zh: e34a8fcd2cbc5bd2
+  zh: 5ba53db00026588b
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/model-experience/local-speech-recognition/kv-cache-effect:
   en: dd8db851599e4449
-  zh: 4fcd2c303d1e483f
+  zh: e8eac36ed1996447
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/known-limitations-and-deferred-work:
   en: d8c80c799fce9f3d
-  zh: dd07b269715559ea
+  zh: 0f8575b45fb1f9ed
 /deepseek-ai-dsh-experimental-speech-to-text-whisper/known-limitations-and-deferred-work/dev-note:
   en: 0225ba087c5266f3
-  zh: a5361cb701dd5ff9
+  zh: 0400e21a2683a23c
