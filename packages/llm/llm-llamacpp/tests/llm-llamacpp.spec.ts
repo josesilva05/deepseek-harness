@@ -4,7 +4,13 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { LlmError, MessageId } from '@deepseek-ai/dsh-llm'
 import type { Message, StreamChunk } from '@deepseek-ai/dsh-llm'
 import { Config, LlamaCppAdapter, LOADED_MODEL_ID, parseProps, probeServer } from '../src/index.ts'
+import { createLaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
 import { resolveConfig } from '../src/config.ts'
+
+/** A launch environment holding only the given process variables. */
+function envOf(values: Record<string, string> = {}) {
+  return createLaunchEnvironmentSnapshot([{ source: 'process', values }])
+}
 
 interface FakeServer {
   url: string
@@ -69,7 +75,7 @@ async function fakeServer(initial: unknown): Promise<FakeServer> {
 
 function adapterFor(baseURL: string, overrides: Partial<Config> = {}): LlamaCppAdapter {
   return new LlamaCppAdapter({
-    config: resolveConfig(configOf({ baseURL, ...overrides })),
+    config: resolveConfig(configOf({ baseURL, ...overrides }), envOf()),
     resolveAttachments: () => undefined,
   })
 }
@@ -188,7 +194,16 @@ describe('LlamaCppAdapter', () => {
 
 describe('resolveConfig', () => {
   it('normalizes the base URL and rejects non-http schemes', () => {
-    expect(resolveConfig(configOf({ baseURL: 'http://127.0.0.1:8080/' })).baseURL).toBe('http://127.0.0.1:8080')
-    expect(() => resolveConfig(configOf({ baseURL: 'file:///tmp' }))).toThrow(/http or https/)
+    expect(resolveConfig(configOf({ baseURL: 'http://127.0.0.1:8080/' }), envOf()).baseURL).toBe('http://127.0.0.1:8080')
+    expect(() => resolveConfig(configOf({ baseURL: 'file:///tmp' }), envOf())).toThrow(/http or https/)
+  })
+
+  it('prefers the configured baseURL, then LLAMACPP_BASE_URL, then the llama-server default address', () => {
+    const env = envOf({ LLAMACPP_BASE_URL: 'http://127.0.0.1:8081/' })
+    expect(resolveConfig(configOf({ baseURL: 'http://10.0.0.5:9000' }), env).baseURL).toBe('http://10.0.0.5:9000')
+    expect(resolveConfig(configOf({}), env).baseURL).toBe('http://127.0.0.1:8081')
+    expect(resolveConfig(configOf({}), envOf()).baseURL).toBe('http://127.0.0.1:8080')
+    expect(resolveConfig(configOf({ baseURLEnv: 'MY_SERVER' }), envOf({ MY_SERVER: 'http://host:1234' })).baseURL).toBe('http://host:1234')
+    expect(() => resolveConfig(configOf({}), envOf({ LLAMACPP_BASE_URL: 'ftp://x' }))).toThrow(/LLAMACPP_BASE_URL "ftp:\/\/x" must use http or https/)
   })
 })

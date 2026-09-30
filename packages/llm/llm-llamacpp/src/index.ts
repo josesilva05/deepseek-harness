@@ -12,19 +12,20 @@
  * - id: llm-llamacpp
  *   name: '@deepseek-ai/dsh-llm-llamacpp'
  *   config:
- *     baseURL: http://127.0.0.1:8080
+ *     baseURL: http://127.0.0.1:8080  # omit to read LLAMACPP_BASE_URL
  * ```
  *
  * @module @deepseek-ai/dsh-llm-llamacpp
  */
 
 import type { Context } from '@deepseek-ai/cordis'
+import { launchEnvironmentOf } from '@deepseek-ai/dsh-launch-environment'
 import { LlamaCppAdapter } from './adapter.ts'
 import { Config, resolveConfig } from './config.ts'
 
 export { LlamaCppAdapter, LOADED_MODEL_ID } from './adapter.ts'
 export type { LlamaCppAdapterOptions } from './adapter.ts'
-export { Config } from './config.ts'
+export { Config, LLAMA_SERVER_DEFAULT_ORIGIN } from './config.ts'
 export type { ResolvedConfig } from './config.ts'
 export { parseProps, probeServer } from './server.ts'
 export type { LlamaCppProbe, LlamaCppServerState } from './server.ts'
@@ -38,7 +39,7 @@ export const inject = ['llm']
  * @param config - schema-validated plugin configuration.
  */
 export function apply(ctx: Context, config: Config): void {
-  const resolved = resolveConfig(config)
+  const resolved = resolveConfig(config, launchEnvironmentOf(ctx))
   const adapter = new LlamaCppAdapter({
     config: resolved,
     resolveAttachments: () => ctx.get('attachments'),

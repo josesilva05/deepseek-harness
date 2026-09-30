@@ -671,6 +671,23 @@ export type ThemePreference = typeof THEME_PREFERENCES[number]
 ```
 <!-- END GENERATED config-catalog:@deepseek-ai/dsh-client-ui-theme -->
 
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-command-llamacpp -->
+<a id="deepseek-aidsh-command-llamacpp"></a>
+
+## `@deepseek-ai/dsh-command-llamacpp`
+
+- `inject`: `commands` · `llm`
+- `source`: [`packages/llm/command-llamacpp/src/index.ts:28`](../packages/llm/command-llamacpp/src/index.ts)
+
+```ts config-catalog
+/** Plugin configuration. */
+export interface Config {
+  /** Provider route the command describes. */
+  route: string
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-command-llamacpp -->
+
 <!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-compaction-basic -->
 <a id="deepseek-aidsh-compaction-basic"></a>
 
@@ -1594,6 +1611,54 @@ export interface Config extends ProtocolConfig {
 }
 ```
 <!-- END GENERATED config-catalog:@deepseek-ai/dsh-llm-deepseek-api-key -->
+
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-llm-llamacpp -->
+<a id="deepseek-aidsh-llm-llamacpp"></a>
+
+## `@deepseek-ai/dsh-llm-llamacpp`
+
+- `inject`: `llm`
+- `refs`: [`RetryPolicyConfig`](../packages/llm/llm/src/index.ts)
+- `source`: [`packages/llm/llm-llamacpp/src/config.ts:21`](../packages/llm/llm-llamacpp/src/config.ts)
+
+```ts config-catalog
+/** Plugin configuration for one llama-server route. */
+export interface Config {
+  /** Harness provider route this plugin registers. */
+  route: string
+  /** Name selectors show for the route. */
+  displayName: string
+  /** Server origin without the `/v1` suffix; omission reads {@link Config.baseURLEnv}, then llama-server's default address. */
+  baseURL?: string
+  /** Environment variable naming the server origin when `baseURL` is omitted; a launcher sets it for the server it started. */
+  baseURLEnv: string
+  /**
+   * Bearer token for a server started with `--api-key`. Omit it for a server
+   * without one; the request then carries a fixed placeholder, because the
+   * OpenAI-compatible client refuses to send an unauthenticated request.
+   */
+  apiKey?: string
+  /** Upper bound for one `GET /props` probe. */
+  probeTimeoutMs: number
+  /** Per-request output cap sent when a request names none; clamped to the served context window. */
+  maxTokens: number
+  /**
+   * Maximum silence while one stream read is outstanding. llama-server sends
+   * nothing while it evaluates the prompt, so this must cover the longest
+   * prompt evaluation the deployment expects.
+   */
+  streamIdleTimeoutMs: number
+  /** Maximum base64 image payload per request; the oldest images beyond it become text placeholders. */
+  maxRequestImageBytes: number
+  /** Total-pixel budget each inline image is downscaled to. */
+  requestImagePixelBudget: number
+  /** Raw encoded-byte cap for each inline image. */
+  requestImageMaxBytes: number
+  /** Provider-owned model-request retry policy. */
+  retryPolicy?: RetryPolicyConfig
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-llm-llamacpp -->
 
 <!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-llm-pi-ai -->
 <a id="deepseek-aidsh-llm-pi-ai"></a>
