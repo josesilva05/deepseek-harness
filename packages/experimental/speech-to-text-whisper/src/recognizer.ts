@@ -9,6 +9,7 @@ import { z } from 'zod'
 import type { Config } from './config.ts'
 import { SpeechInputError } from './input.ts'
 import { inspectRuntime, prepareRuntime, type RuntimePaths } from './runtime.ts'
+import { SpeechDownloadError } from './download-error.ts'
 
 const transcriptSchema = z.object({
   text: z.string(), audioSeconds: z.number().nonnegative(), inferenceSeconds: z.number().nonnegative(),
@@ -198,7 +199,7 @@ export class WhisperWorker {
         if (this.lifetime.signal.aborted) return
         this.publish(abort.signal.aborted ? { phase: 'cancelled' }
           : { phase: 'failed', message: error instanceof Error ? error.message : String(error),
-            ...error instanceof Error && error.message.includes('resource') ? { download: JSON.parse(error.message) } : {} })
+            ...error instanceof SpeechDownloadError ? { download: error.download } : {} })
       }).finally(() => { this.preparing = undefined })
   }
 
