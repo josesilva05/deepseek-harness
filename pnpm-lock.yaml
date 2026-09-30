@@ -8008,6 +8008,37 @@ importers:
         specifier: ^4.22.4
         version: 4.22.4
 
+  packages/experimental/speech-to-text-whisper:
+    dependencies:
+      '@deepseek-ai/dsh-timeout':
+        specifier: workspace:*
+        version: link:../../util/timeout
+      '@deepseek-ai/schemastery':
+        specifier: link:../../../vendor/schemastery
+        version: link:../../../vendor/schemastery
+      sherpa-onnx-node:
+        specifier: 1.13.8
+        version: 1.13.8
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@deepseek-ai/cordis':
+        specifier: workspace:~
+        version: link:../../../vendor/cordis
+      '@deepseek-ai/dsh-experimental-speech-to-text':
+        specifier: workspace:*
+        version: link:../speech-to-text
+      '@deepseek-ai/dsh-subprocess':
+        specifier: workspace:*
+        version: link:../../subprocess/subprocess
+      '@deepseek-ai/dsh-subprocess-local':
+        specifier: workspace:*
+        version: link:../../subprocess/subprocess-local
+      tsx:
+        specifier: ^4.22.4
+        version: 4.22.4
+
   packages/experimental/tool-agent-team:
     dependencies:
       '@deepseek-ai/schemastery':
@@ -8083,6 +8114,9 @@ importers:
       '@deepseek-ai/dsh-experimental-speech-to-text-sensevoice':
         specifier: workspace:*
         version: link:../speech-to-text-sensevoice
+      '@deepseek-ai/dsh-experimental-speech-to-text-whisper':
+        specifier: workspace:*
+        version: link:../speech-to-text-whisper
     devDependencies:
       '@deepseek-ai/cordis':
         specifier: workspace:~
