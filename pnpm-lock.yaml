@@ -8114,6 +8114,9 @@ importers:
       '@deepseek-ai/dsh-experimental-speech-to-text-sensevoice':
         specifier: workspace:*
         version: link:../speech-to-text-sensevoice
+      '@deepseek-ai/dsh-experimental-speech-to-text-whisper':
+        specifier: workspace:*
+        version: link:../speech-to-text-whisper
     devDependencies:
       '@deepseek-ai/cordis':
         specifier: workspace:~
