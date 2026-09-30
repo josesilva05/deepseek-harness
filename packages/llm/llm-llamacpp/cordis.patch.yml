@@ -1,9 +1,8 @@
 # Optional Profile Bundle: register the `llamacpp` route for a llama-server
 # on this machine. The served model is read from the running server, so a
 # model switched in the launcher needs no change here. A launcher that starts
-# the server on another address passes it through LLAMACPP_BASE_URL.
+# the server on another address sets LLAMACPP_BASE_URL, which the plugin reads
+# from the launch environment.
 - insert:
     - id: llm-llamacpp
       name: '@deepseek-ai/dsh-llm-llamacpp'
-      config:
-        baseURL: !!js process.env.LLAMACPP_BASE_URL || 'http://127.0.0.1:8080'

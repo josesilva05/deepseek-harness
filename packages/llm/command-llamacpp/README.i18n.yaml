@@ -1,6 +1,52 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write packages/llm/command-llamacpp/README.md
-README.md: 5a84374cff249694e30da6c7c97694adbd79061a
-README.zh.md: e05923ef4e7bd2dbddd756df61fc6974c11f38cd
+/:
+  en: 8dc2ed5ceeb96055
+  zh: 8ae6fcca705e4d8e
+/deepseek-ai-dsh-command-llamacpp:
+  en: e99dc95858d854f6
+  zh: 1b3aef87a99c51e3
+/deepseek-ai-dsh-command-llamacpp/summary:
+  en: 2a101ba5ce3207e5
+  zh: a99384e6380e999e
+/deepseek-ai-dsh-command-llamacpp/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-command-llamacpp/use-this-package:
+  en: bbff250eba0f1b89
+  zh: 0a618f05cc88ee2b
+/deepseek-ai-dsh-command-llamacpp/use-this-package/install-into-a-profile:
+  en: 23d798880f5d9d44
+  zh: f00fd6900ddb6933
+/deepseek-ai-dsh-command-llamacpp/use-this-package/what-you-get:
+  en: 15ea302d103d87e6
+  zh: 43bafb376a6aa392
+/deepseek-ai-dsh-command-llamacpp/understand-the-implementation:
+  en: a86679ba01d3a15a
+  zh: d386a9eea03a8136
+/deepseek-ai-dsh-command-llamacpp/further-exploration:
+  en: 8a1c8dfacb3e9296
+  zh: 60d0501ab9cef957
+/deepseek-ai-dsh-command-llamacpp/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-command-llamacpp/model-experience/human-llamacpp-status:
+  en: 288c810914ef2325
+  zh: 571d5fa67b6a463b
+/deepseek-ai-dsh-command-llamacpp/model-experience/human-llamacpp-status/what-the-model-sees:
+  en: b66179518501b5cb
+  zh: 1dcba8de16fc754c
+/deepseek-ai-dsh-command-llamacpp/model-experience/human-llamacpp-status/token-effect:
+  en: 138311ea1de58faf
+  zh: 9a5acf59e74fb0fb
+/deepseek-ai-dsh-command-llamacpp/model-experience/human-llamacpp-status/kv-cache-effect:
+  en: 739e99f2faa16ab6
+  zh: bf8fc21b1eba6689
+/deepseek-ai-dsh-command-llamacpp/known-limitations-and-deferred-work:
+  en: 4ccf6407c667ee9b
+  zh: 5bef74f432523313
+/deepseek-ai-dsh-command-llamacpp/known-limitations-and-deferred-work/dev-note:
+  en: 0225ba087c5266f3
+  zh: 0400e21a2683a23c
