@@ -1,6 +1,58 @@
-# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
-# side as of the last confirmed-consistent state. Both languages carry equal authority;
-# after editing either side, bring the other along and re-record with:
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write packages/llm/llm-llamacpp/README.md
-README.md: 608121f9b055d31be5e4779fdc820642c3e4d093
-README.zh.md: fda65b77f8ae57876d213ed4810c2684d65ba542
+/:
+  en: a704df8c48d53f0c
+  zh: 48a4b590aa05f597
+/deepseek-ai-dsh-llm-llamacpp:
+  en: 54abd9900318c919
+  zh: bf51261936064b20
+/deepseek-ai-dsh-llm-llamacpp/summary:
+  en: 621a710783c2b638
+  zh: 558339c11ef41966
+/deepseek-ai-dsh-llm-llamacpp/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-llm-llamacpp/use-this-package:
+  en: bbff250eba0f1b89
+  zh: 0a618f05cc88ee2b
+/deepseek-ai-dsh-llm-llamacpp/use-this-package/install-into-a-profile:
+  en: 2d4750d257321228
+  zh: 1f08eb1b4ed9cb21
+/deepseek-ai-dsh-llm-llamacpp/use-this-package/what-you-get:
+  en: 040798263eb9ba07
+  zh: 499beb73c11587c8
+/deepseek-ai-dsh-llm-llamacpp/use-this-package/configuration:
+  en: 283333ad649021b2
+  zh: f62a4ee13d3a4a78
+/deepseek-ai-dsh-llm-llamacpp/use-this-package/failures-and-recovery:
+  en: 159bb377b7a22e9f
+  zh: c48f10916700866c
+/deepseek-ai-dsh-llm-llamacpp/understand-the-implementation:
+  en: 76c304ff61a26498
+  zh: 9f7c71556fe5888b
+/deepseek-ai-dsh-llm-llamacpp/further-exploration:
+  en: 3ddbd3c0ccb311bc
+  zh: 2d141b66609f7e95
+/deepseek-ai-dsh-llm-llamacpp/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-llm-llamacpp/model-experience/requests-to-the-served-model:
+  en: b3d684962ac8eddd
+  zh: 1bb43e70857e6bef
+/deepseek-ai-dsh-llm-llamacpp/model-experience/requests-to-the-served-model/what-the-model-sees:
+  en: 7597c56b050d42ee
+  zh: a9b933a8100aeb54
+/deepseek-ai-dsh-llm-llamacpp/model-experience/requests-to-the-served-model/token-effect:
+  en: c00e495ecc91bddd
+  zh: 5371d1f2c9b7a980
+/deepseek-ai-dsh-llm-llamacpp/model-experience/requests-to-the-served-model/kv-cache-effect:
+  en: 032d76818dadf874
+  zh: ac1ddad4e28658b4
+/deepseek-ai-dsh-llm-llamacpp/known-limitations-and-deferred-work:
+  en: 47e47739129bed0d
+  zh: 860bdbce2836c6c0
+/deepseek-ai-dsh-llm-llamacpp/known-limitations-and-deferred-work/dev-note:
+  en: 0225ba087c5266f3
+  zh: 0400e21a2683a23c

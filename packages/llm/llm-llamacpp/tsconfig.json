@@ -18,6 +18,9 @@
       "path": "../../../vendor/schemastery"
     },
     {
+      "path": "../../util/launch-environment"
+    },
+    {
       "path": "../../llm/llm"
     },
     {

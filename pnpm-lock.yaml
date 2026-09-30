@@ -9754,6 +9754,9 @@ importers:
       '@deepseek-ai/dsh-invariants':
         specifier: workspace:^
         version: link:../../runtime-diagnostics/invariants
+      '@deepseek-ai/dsh-launch-environment':
+        specifier: workspace:^
+        version: link:../../util/launch-environment
       '@deepseek-ai/dsh-llm':
         specifier: workspace:^
         version: link:../llm
