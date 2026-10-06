@@ -9,6 +9,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type { LlmConfigurableProvider, LlmProviderInfo, ModelCatalog } from '@deepseek-ai/dsh-api-remotes/client'
 import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
+import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
+import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
 import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
 import { apply, inject, localServers, LocalServersStore } from '../src/client/index.ts'
 import type { LocalServersProps, LocalServersRemote, LocalServersView, RemoteRead } from '../src/client/index.ts'
@@ -45,7 +47,7 @@ function remoteOf(overrides: Partial<LocalServersRemote> = {}): LocalServersRemo
   }
 }
 
-const t = (key: keyof typeof en) => en[key]
+const t = makeTranslate(en, commonEn)
 
 function propsFor(view: LocalServersView, refresh = vi.fn(() => Promise.resolve())): LocalServersProps {
   return {
