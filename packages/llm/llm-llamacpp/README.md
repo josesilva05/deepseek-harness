@@ -56,7 +56,7 @@ The `llamacpp` provider route with one model, `loaded`, in every model selector.
 
 ### Failures and recovery
 
-With no server, a server still loading (HTTP 503), or router mode without a loaded model, `listModels` returns `llama.cpp (offline)` and `resolveModel` returns the model without context metadata, so the route stays selectable. `prepareCall` and `stream` fail with `LlmError` code `SERVER_UNAVAILABLE`, which names the reason and the address. Any model id other than `loaded` fails with `UNKNOWN_MODEL`; the id names the role rather than a file, so a saved selection stays valid across model switches.
+With no server, a server still loading (HTTP 503), or router mode without a loaded model, `listModels` returns `llama.cpp (offline)` with the reason as its description, and `resolveModel` returns the model without context metadata, so the route stays selectable. `prepareCall` and `stream` fail with `LlmError` code `SERVER_UNAVAILABLE`, which names the reason and the address. Any model id other than `loaded` fails with `UNKNOWN_MODEL`; the id names the role rather than a file, so a saved selection stays valid across model switches.
 
 -----
 
@@ -66,7 +66,7 @@ With no server, a server still loading (HTTP 503), or router mode without a load
 <details>
 <summary>Maintainer details — click to expand</summary>
 
-`listModels` and `resolveModel` probe `/props`. The model name is the GGUF file name without `.gguf`; `contextWindow` is `default_generation_settings.n_ctx`, the tokens one slot holds; `image` input is advertised only when the server runs with `--mmproj`. Requests go to `<baseURL>/v1/chat/completions` through the pi-ai `openai-completions` client, driven by `PiAiAdapter` from `dsh-llm-pi-ai`; reasoning deltas (`reasoning_content`), tool calls, usage, and finish reasons arrive as the standard `StreamChunk` sequence. A changed server state builds a new provider profile, and each call keeps the profile it was prepared with.
+`listModels` and `resolveModel` probe `/props`. The model name is the GGUF file name without `.gguf`; `contextWindow` is `default_generation_settings.n_ctx`, the tokens one slot holds; `image` input is advertised only when the server runs with `--mmproj`. `listModels` describes the model as `<n>-token context at <address>`. Another plugin serving a server that speaks the same API, such as [`dsh-llm-localcode`](../llm-localcode/README.md), registers its route with the exported `resolveConfig` and `registerLlamaServerRoute`, which take its plugin name for messages and the adapter's start hint for `SERVER_UNAVAILABLE`. Requests go to `<baseURL>/v1/chat/completions` through the pi-ai `openai-completions` client, driven by `PiAiAdapter` from `dsh-llm-pi-ai`; reasoning deltas (`reasoning_content`), tool calls, usage, and finish reasons arrive as the standard `StreamChunk` sequence. A changed server state builds a new provider profile, and each call keeps the profile it was prepared with.
 
 </details>
 

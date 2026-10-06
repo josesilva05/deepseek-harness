@@ -50,6 +50,12 @@ const PLACEHOLDER_API_KEY = 'llama.cpp'
 export interface LlamaCppAdapterOptions {
   /** Resolved plugin configuration. */
   config: ResolvedConfig
+  /**
+   * What to do about a server that does not answer, ending the `SERVER_UNAVAILABLE`
+   * message before the address; default `start llama-server with a model`. Another
+   * server speaking llama-server's API names how its own server starts.
+   */
+  startHint?: string
   /** Resolve the optional durable attachment service at request time. */
   resolveAttachments: NonNullable<PiAiAdapterOptions['resolveAttachments']>
   /** Observe history degraded to provider-neutral content. */
@@ -163,7 +169,7 @@ export class LlamaCppAdapter extends LlmAdapter {
   private assertModel(provider: string, model: string): void {
     if (model !== LOADED_MODEL_ID) {
       throw new LlmError(
-        `llama.cpp route "${provider}" serves only model "${LOADED_MODEL_ID}" (the model the server has loaded), not "${model}"`,
+        `${this.options.config.displayName} route "${provider}" serves only model "${LOADED_MODEL_ID}" (the model the server has loaded), not "${model}"`,
         'UNKNOWN_MODEL',
       )
     }
@@ -173,20 +179,27 @@ export class LlamaCppAdapter extends LlmAdapter {
   private async requireOnline(signal?: AbortSignal): Promise<void> {
     const state = await this.online(signal)
     if (typeof state === 'string') {
-      throw new LlmError(
-        `llama.cpp: ${state}; start llama-server with a model at ${this.options.config.baseURL}`,
-        'SERVER_UNAVAILABLE',
-      )
+      const { config, startHint = 'start llama-server with a model' } = this.options
+      throw new LlmError(`${config.displayName}: ${state}; ${startHint} at ${config.baseURL}`, 'SERVER_UNAVAILABLE')
     }
   }
 
+  /**
+   * The one model with what selectors show beside its name: the served context
+   * window and the address, or why the server does not serve now.
+   */
   override async listModels(provider: string): Promise<readonly LlmModelInfo[]> {
     const state = await this.online()
+    const { config } = this.options
+    if (typeof state === 'string') {
+      return [{ provider, id: LOADED_MODEL_ID, name: `${config.displayName} (offline)`, description: state }]
+    }
     return [{
       provider,
       id: LOADED_MODEL_ID,
-      name: typeof state === 'string' ? `${this.options.config.displayName} (offline)` : state.modelName,
-      ...typeof state === 'string' ? {} : { inputModalities: state.vision ? ['text', 'image'] : ['text'] },
+      name: state.modelName,
+      description: `${String(state.contextWindow)}-token context at ${config.baseURL}`,
+      inputModalities: state.vision ? ['text', 'image'] : ['text'],
     }]
   }
 

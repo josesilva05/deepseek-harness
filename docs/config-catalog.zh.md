@@ -1721,6 +1721,45 @@ export interface Config {
 ```
 <!-- END GENERATED config-catalog:@deepseek-ai/dsh-llm-llamacpp -->
 
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-llm-localcode -->
+<a id="deepseek-aidsh-llm-localcode"></a>
+
+## `@deepseek-ai/dsh-llm-localcode`
+
+- `inject`: `llm`
+- `refs`: [`RetryPolicyConfig`](../packages/llm/llm/src/index.ts)
+- `source`: [`packages/llm/llm-localcode/src/config.ts:20`](../packages/llm/llm-localcode/src/config.ts)
+
+```ts config-catalog
+/** Plugin configuration for the localcode route. */
+export interface Config {
+  /** Harness provider route this plugin registers. */
+  route: string
+  /** Name selectors show for the route. */
+  displayName: string
+  /** API origin without the `/v1` suffix; omission reads {@link Config.baseURLEnv}, then `http://127.0.0.1:8080`, where `start-api.bat` listens. */
+  baseURL?: string
+  /** Environment variable naming the API origin when `baseURL` is omitted; `start-api.bat --harness` sets it for the API it started. */
+  baseURLEnv: string
+  /** Upper bound for one `GET /props` probe. */
+  probeTimeoutMs: number
+  /**
+   * Per-request output cap sent when a request names none; clamped to the served
+   * context window. Compaction reserves this cap out of the window, so a cap
+   * close to the window leaves compaction no message budget.
+   */
+  maxTokens: number
+  /**
+   * Maximum silence while one stream read is outstanding. A long prompt takes
+   * minutes on this machine's engine, so this covers the longest prompt read.
+   */
+  streamIdleTimeoutMs: number
+  /** Provider-owned model-request retry policy. */
+  retryPolicy?: RetryPolicyConfig
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-llm-localcode -->
+
 <!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-llm-pi-ai -->
 <a id="deepseek-aidsh-llm-pi-ai"></a>
 
@@ -4492,6 +4531,7 @@ export interface Config {
 | `@deepseek-ai/dsh-client-ui-settings` | — | [`packages/client/ui-settings/src/index.ts`](../packages/client/ui-settings/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-settings-agent-loop` | — | [`packages/client/ui-settings-agent-loop/src/index.ts`](../packages/client/ui-settings-agent-loop/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-settings-general` | — | [`packages/client/ui-settings-general/src/index.ts`](../packages/client/ui-settings-general/src/index.ts) |
+| `@deepseek-ai/dsh-client-ui-settings-local-servers` | — | [`packages/client/ui-settings-local-servers/src/index.ts`](../packages/client/ui-settings-local-servers/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-settings-plugin-inventory` | — | [`packages/client/ui-settings-plugin-inventory/src/index.ts`](../packages/client/ui-settings-plugin-inventory/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-settings-plugins` | — | [`packages/client/ui-settings-plugins/src/index.ts`](../packages/client/ui-settings-plugins/src/index.ts) |
 | `@deepseek-ai/dsh-client-ui-settings-session-log` | — | [`packages/client/ui-settings-session-log/src/index.ts`](../packages/client/ui-settings-session-log/src/index.ts) |
