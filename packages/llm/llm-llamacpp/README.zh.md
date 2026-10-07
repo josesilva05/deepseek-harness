@@ -56,7 +56,7 @@ dsh plugin --profile web add ./packages/llm/llm-llamacpp
 
 ### 失败与恢复
 
-没有服务器、服务器仍在加载（HTTP 503）或路由模式下未加载模型时，`listModels` 返回 `llama.cpp (offline)`，`resolveModel` 返回不含上下文元数据的模型，路由仍可被选择。`prepareCall` 与 `stream` 以 `LlmError` 代码 `SERVER_UNAVAILABLE` 失败，并给出原因和地址。`loaded` 以外的模型 id 以 `UNKNOWN_MODEL` 失败；该 id 表示角色而非文件，因此已保存的选择在切换模型后依然有效。
+没有服务器、服务器仍在加载（HTTP 503）或路由模式下未加载模型时，`listModels` 返回 `llama.cpp (offline)` 并以原因作为描述，`resolveModel` 返回不含上下文元数据的模型，路由仍可被选择。`prepareCall` 与 `stream` 以 `LlmError` 代码 `SERVER_UNAVAILABLE` 失败，并给出原因和地址。`loaded` 以外的模型 id 以 `UNKNOWN_MODEL` 失败；该 id 表示角色而非文件，因此已保存的选择在切换模型后依然有效。
 
 -----
 
@@ -66,7 +66,7 @@ dsh plugin --profile web add ./packages/llm/llm-llamacpp
 <details>
 <summary>维护者细节 — 点击展开</summary>
 
-`listModels` 与 `resolveModel` 会探测 `/props`。模型名称是去掉 `.gguf` 的 GGUF 文件名；`contextWindow` 取 `default_generation_settings.n_ctx`，即一个槽位容纳的 token 数；只有服务器以 `--mmproj` 运行时才声明 `image` 输入。请求经由 `dsh-llm-pi-ai` 的 `PiAiAdapter` 驱动的 pi-ai `openai-completions` 客户端发送到 `<baseURL>/v1/chat/completions`；推理增量（`reasoning_content`）、工具调用、用量与结束原因以标准 `StreamChunk` 序列到达。服务器状态变化会构建新的提供方配置，每次调用保持其准备时的配置。
+`listModels` 与 `resolveModel` 会探测 `/props`。模型名称是去掉 `.gguf` 的 GGUF 文件名；`contextWindow` 取 `default_generation_settings.n_ctx`，即一个槽位容纳的 token 数；只有服务器以 `--mmproj` 运行时才声明 `image` 输入。`listModels` 将模型描述为 `<n>-token context at <地址>`。为使用同一 API 的其他服务器提供路由的插件（例如 [`dsh-llm-localcode`](../llm-localcode/README.zh.md)）通过导出的 `resolveConfig` 与 `registerLlamaServerRoute` 注册其路由，二者接收该插件的名称用于消息，并接收适配器用于 `SERVER_UNAVAILABLE` 的启动提示。请求经由 `dsh-llm-pi-ai` 的 `PiAiAdapter` 驱动的 pi-ai `openai-completions` 客户端发送到 `<baseURL>/v1/chat/completions`；推理增量（`reasoning_content`）、工具调用、用量与结束原因以标准 `StreamChunk` 序列到达。服务器状态变化会构建新的提供方配置，每次调用保持其准备时的配置。
 
 </details>
 

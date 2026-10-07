@@ -1,9 +1,10 @@
 import { createServer } from 'node:http'
 import type { Server } from 'node:http'
 import { afterEach, describe, expect, it } from 'vitest'
-import { LlmError, MessageId } from '@deepseek-ai/dsh-llm'
+import { Context } from '@deepseek-ai/cordis'
+import LlmRuntime, { LlmError, MessageId } from '@deepseek-ai/dsh-llm'
 import type { Message, StreamChunk } from '@deepseek-ai/dsh-llm'
-import { Config, LlamaCppAdapter, LOADED_MODEL_ID, parseProps, probeServer } from '../src/index.ts'
+import { apply, Config, LlamaCppAdapter, LOADED_MODEL_ID, parseProps, probeServer, registerLlamaServerRoute } from '../src/index.ts'
 import { createLaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
 import { resolveConfig } from '../src/config.ts'
 
@@ -150,7 +151,11 @@ describe('LlamaCppAdapter', () => {
     const server = await fakeServer(props('/models/Qwen3.8-27B-UD-Q5_K_M.gguf', 131072, true))
     const adapter = adapterFor(server.url)
     expect(await adapter.listModels('llamacpp')).toEqual([{
-      provider: 'llamacpp', id: LOADED_MODEL_ID, name: 'Qwen3.8-27B-UD-Q5_K_M', inputModalities: ['text', 'image'],
+      provider: 'llamacpp',
+      id: LOADED_MODEL_ID,
+      name: 'Qwen3.8-27B-UD-Q5_K_M',
+      description: `131072-token context at ${server.url}`,
+      inputModalities: ['text', 'image'],
     }])
     const model = await adapter.resolveModel('llamacpp', LOADED_MODEL_ID)
     expect(model.context).toEqual({ contextWindow: 131072 })
@@ -178,17 +183,50 @@ describe('LlamaCppAdapter', () => {
   })
 
   it('keeps the route selectable but refuses requests while the server is offline', async () => {
-    const adapter = adapterFor(await closedPort())
-    expect(await adapter.listModels('llamacpp')).toEqual([{ provider: 'llamacpp', id: LOADED_MODEL_ID, name: 'llama.cpp (offline)' }])
+    const url = await closedPort()
+    const adapter = adapterFor(url)
+    const models = await adapter.listModels('llamacpp')
+    expect(models).toMatchObject([{ provider: 'llamacpp', id: LOADED_MODEL_ID, name: 'llama.cpp (offline)' }])
+    expect(models[0]?.description).toContain(`no server answered at ${url}/props`)
     expect(await adapter.resolveModel('llamacpp', LOADED_MODEL_ID)).toEqual({
       provider: 'llamacpp', id: LOADED_MODEL_ID, name: 'llama.cpp (offline)',
     })
     await expect(adapter.prepareCall('llamacpp', LOADED_MODEL_ID)).rejects.toMatchObject({ code: 'SERVER_UNAVAILABLE' })
+    await expect(adapter.prepareCall('llamacpp', LOADED_MODEL_ID)).rejects.toThrow(/^llama\.cpp: .*; start llama-server with a model at http/)
+  })
+
+  it('names the route and how its server starts when another server speaks the same API', async () => {
+    const adapter = new LlamaCppAdapter({
+      config: resolveConfig(configOf({ baseURL: await closedPort(), displayName: 'localcode' }), envOf()),
+      startHint: 'run start-api.bat',
+      resolveAttachments: () => undefined,
+    })
+    await expect(adapter.prepareCall('localcode', LOADED_MODEL_ID)).rejects.toThrow(/^localcode: .*; run start-api\.bat at http/)
+    await expect(adapter.resolveModel('localcode', 'qwen')).rejects.toThrow(/^localcode route "localcode" serves only model "loaded"/)
   })
 
   it('refuses model ids other than the loaded model', async () => {
     const adapter = adapterFor('http://127.0.0.1:1')
     await expect(adapter.resolveModel('llamacpp', 'qwen')).rejects.toBeInstanceOf(LlmError)
+  })
+})
+
+describe('route registration', () => {
+  it('registers the configured route on ctx.llm', async () => {
+    const server = await fakeServer(props('/models/a.gguf', 4096, false))
+    const ctx = new Context()
+    await ctx.plugin(LlmRuntime)
+    apply(ctx, configOf({ baseURL: server.url }))
+    expect(await ctx.llm.listModels('llamacpp')).toMatchObject([{ id: LOADED_MODEL_ID, name: 'a' }])
+  })
+
+  it('registers another llama-server-compatible route under its own name and start hint', async () => {
+    const ctx = new Context()
+    await ctx.plugin(LlmRuntime)
+    const url = await closedPort()
+    registerLlamaServerRoute(ctx, resolveConfig(configOf({ baseURL: url, route: 'localcode', displayName: 'localcode' }), envOf()),
+      'llm-localcode', 'run start-api.bat')
+    expect(await ctx.llm.listModels('localcode')).toMatchObject([{ name: 'localcode (offline)' }])
   })
 })
 
@@ -205,5 +243,9 @@ describe('resolveConfig', () => {
     expect(resolveConfig(configOf({}), envOf()).baseURL).toBe('http://127.0.0.1:8080')
     expect(resolveConfig(configOf({ baseURLEnv: 'MY_SERVER' }), envOf({ MY_SERVER: 'http://host:1234' })).baseURL).toBe('http://host:1234')
     expect(() => resolveConfig(configOf({}), envOf({ LLAMACPP_BASE_URL: 'ftp://x' }))).toThrow(/LLAMACPP_BASE_URL "ftp:\/\/x" must use http or https/)
+  })
+
+  it('prefixes configuration errors with the plugin that resolves them', () => {
+    expect(() => resolveConfig(configOf({ baseURL: 'not a url' }), envOf(), 'llm-localcode')).toThrow(/^llm-localcode: baseURL "not a url" is not a URL/)
   })
 })

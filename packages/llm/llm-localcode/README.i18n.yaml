@@ -1,0 +1,58 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write packages/llm/llm-localcode/README.md
+/:
+  en: d98c8dddc8eca022
+  zh: 1efc1c79d9aef567
+/deepseek-ai-dsh-llm-localcode:
+  en: cdeb4e64f690d407
+  zh: 386e8c95c343084d
+/deepseek-ai-dsh-llm-localcode/summary:
+  en: 06e9c081caaee38a
+  zh: 7532b3f888e06fa6
+/deepseek-ai-dsh-llm-localcode/table-of-contents:
+  en: d152484eb41ac6b4
+  zh: 09388d293f9be9cb
+/deepseek-ai-dsh-llm-localcode/use-this-package:
+  en: bbff250eba0f1b89
+  zh: 0a618f05cc88ee2b
+/deepseek-ai-dsh-llm-localcode/use-this-package/install-into-a-profile:
+  en: 77f4f1fbae9105f9
+  zh: 999bce70c7ac1be2
+/deepseek-ai-dsh-llm-localcode/use-this-package/what-you-get:
+  en: 1ecac5f7318e689c
+  zh: 2db0f576136f8531
+/deepseek-ai-dsh-llm-localcode/use-this-package/configuration:
+  en: 0b87b44919abac76
+  zh: 9c4225c4c29fab41
+/deepseek-ai-dsh-llm-localcode/use-this-package/failures-and-recovery:
+  en: 03263f4772e49ba4
+  zh: f430d8092562250f
+/deepseek-ai-dsh-llm-localcode/understand-the-implementation:
+  en: 9781db36d98f601d
+  zh: 55576feea540fc95
+/deepseek-ai-dsh-llm-localcode/further-exploration:
+  en: 3c755639c617b193
+  zh: 7bdf9d103fc87a52
+/deepseek-ai-dsh-llm-localcode/model-experience:
+  en: 215e7ba838619b7b
+  zh: a311da3843709f90
+/deepseek-ai-dsh-llm-localcode/model-experience/requests-to-the-served-model:
+  en: b3d684962ac8eddd
+  zh: fbd03ebfd72e24ec
+/deepseek-ai-dsh-llm-localcode/model-experience/requests-to-the-served-model/what-the-model-sees:
+  en: 351c1e7cfc50dc07
+  zh: 939d479cfb35d305
+/deepseek-ai-dsh-llm-localcode/model-experience/requests-to-the-served-model/token-effect:
+  en: 02e439ad295ea464
+  zh: 632333a77c1266d7
+/deepseek-ai-dsh-llm-localcode/model-experience/requests-to-the-served-model/kv-cache-effect:
+  en: 6d2e252cf3169b1e
+  zh: 292b29e17a1c598f
+/deepseek-ai-dsh-llm-localcode/known-limitations-and-deferred-work:
+  en: 781c9be528ede9c0
+  zh: 13e7e8232a92e21f
+/deepseek-ai-dsh-llm-localcode/known-limitations-and-deferred-work/dev-note:
+  en: 0225ba087c5266f3
+  zh: 0400e21a2683a23c

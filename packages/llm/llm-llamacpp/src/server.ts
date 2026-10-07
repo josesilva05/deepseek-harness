@@ -94,7 +94,7 @@ export async function probeServer(baseURL: string, timeoutMs: number, signal?: A
   } catch (error) {
     signal?.throwIfAborted()
     const reason = error instanceof Error ? error.message : String(error)
-    return { kind: 'offline', reason: `no llama-server answered at ${url.href} (${reason})` }
+    return { kind: 'offline', reason: `no server answered at ${url.href} (${reason})` }
   }
   // 503 is llama-server's answer while the model is still loading.
   if (!response.ok) return { kind: 'offline', reason: `${url.href} answered HTTP ${String(response.status)}` }
