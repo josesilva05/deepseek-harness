@@ -39,7 +39,7 @@ The language hint `auto` maps to Whisper's empty language, which makes sherpa-on
 <details>
 <summary>Maintainer details — click to expand</summary>
 
-The worker, queue, deadlines, cancellation and idle release match the SenseVoice provider; only the model files and the native recognizer configuration differ. The recognizer is created once per worker with an empty language and updated per recording with the requested hint before inference. Invalid language or WAV input is rejected before native inference and retains the loaded worker. No runtime invariant companion is published because `dsh-subprocess` owns process-range observations and this provider has no independent projection to reconcile.
+The worker, queue, deadlines, cancellation and idle release match the SenseVoice provider; only the model files and the native recognizer configuration differ. The recognizer is created once per worker with an empty language and updated per recording with the requested hint before inference. Invalid language or WAV input is rejected before native inference and retains the loaded worker.
 
 </details>
 
