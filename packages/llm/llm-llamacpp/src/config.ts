@@ -95,10 +95,11 @@ export interface ResolvedConfig extends Omit<Config, 'retryPolicy' | 'baseURL' |
  * else llama-server's default address.
  * @param config - schema-validated plugin configuration.
  * @param environment - the launch environment snapshot the variable is read from.
+ * @param plugin - plugin name that prefixes configuration errors; another plugin serving a llama-server-compatible route passes its own.
  * @returns the resolved configuration.
- * @throws Error naming the source when the origin is not an http(s) URL.
+ * @throws Error naming the plugin and source when the origin is not an http(s) URL or an image bound is invalid.
  */
-export function resolveConfig(config: Config, environment: LaunchEnvironmentSnapshot): ResolvedConfig {
+export function resolveConfig(config: Config, environment: LaunchEnvironmentSnapshot, plugin = 'llm-llamacpp'): ResolvedConfig {
   const fromEnv = config.baseURL === undefined ? environment.get(config.baseURLEnv)?.value : undefined
   const origin = config.baseURL ?? (fromEnv !== undefined && fromEnv.length > 0 ? fromEnv : LLAMA_SERVER_DEFAULT_ORIGIN)
   const source = config.baseURL !== undefined ? 'baseURL' : fromEnv ? config.baseURLEnv : 'default'
@@ -106,25 +107,25 @@ export function resolveConfig(config: Config, environment: LaunchEnvironmentSnap
   try {
     url = new URL(origin)
   } catch (cause) {
-    throw new Error(`llm-llamacpp: ${source} "${origin}" is not a URL`, { cause })
+    throw new Error(`${plugin}: ${source} "${origin}" is not a URL`, { cause })
   }
   if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-    throw new Error(`llm-llamacpp: ${source} "${origin}" must use http or https`)
+    throw new Error(`${plugin}: ${source} "${origin}" must use http or https`)
   }
   const { maxRequestImages } = config
   const imageOffloadCountQuantum = config.imageOffloadCountQuantum
     ?? Math.min(DEFAULT_IMAGE_OFFLOAD_COUNT_QUANTUM, maxRequestImages)
   if (!Number.isSafeInteger(maxRequestImages) || maxRequestImages <= 0) {
-    throw new Error('llm-llamacpp: maxRequestImages must be a positive safe integer')
+    throw new Error(`${plugin}: maxRequestImages must be a positive safe integer`)
   }
   if (!Number.isSafeInteger(imageOffloadCountQuantum) || imageOffloadCountQuantum <= 0 || imageOffloadCountQuantum > maxRequestImages) {
-    throw new Error('llm-llamacpp: imageOffloadCountQuantum must be a positive safe integer no greater than maxRequestImages')
+    throw new Error(`${plugin}: imageOffloadCountQuantum must be a positive safe integer no greater than maxRequestImages`)
   }
   const { retryPolicy, baseURL: _baseURL, ...rest } = config
   return {
     ...rest,
     imageOffloadCountQuantum,
     baseURL: url.href.replace(/\/+$/, ''),
-    retryPolicy: resolveRetryPolicy(retryPolicy, 'llm-llamacpp: retryPolicy'),
+    retryPolicy: resolveRetryPolicy(retryPolicy, `${plugin}: retryPolicy`),
   }
 }
