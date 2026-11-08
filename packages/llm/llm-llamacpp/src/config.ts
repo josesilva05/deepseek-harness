@@ -12,6 +12,10 @@ import z from '@deepseek-ai/schemastery'
 import { resolveRetryPolicy, RetryPolicySchema } from '@deepseek-ai/dsh-llm'
 import type { ResolvedRetryPolicy, RetryPolicyConfig } from '@deepseek-ai/dsh-llm'
 import type { LaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
+import {
+  DEFAULT_IMAGE_OFFLOAD_COUNT_QUANTUM,
+  DEFAULT_MAX_REQUEST_IMAGES,
+} from '@deepseek-ai/dsh-llm-pi-ai/src/config.ts'
 import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
 
 /** llama-server's own default listen address, used when neither the config nor the environment names one. */
@@ -45,6 +49,10 @@ export interface Config {
   streamIdleTimeoutMs: number
   /** Maximum base64 image payload per request; the oldest images beyond it become text placeholders. */
   maxRequestImageBytes: number
+  /** Inline image occurrences per request; the oldest beyond it become text placeholders. */
+  maxRequestImages: number
+  /** Count-overflow offload step; omission resolves to the pi-ai default bounded by {@link Config.maxRequestImages}. */
+  imageOffloadCountQuantum?: number
   /** Total-pixel budget each inline image is downscaled to. */
   requestImagePixelBudget: number
   /** Raw encoded-byte cap for each inline image. */
@@ -64,15 +72,19 @@ export const Config: z<Config> = z.object({
   maxTokens: z.number().step(1).min(1).default(32_768),
   streamIdleTimeoutMs: z.number().step(1).min(1).max(MAX_TIMER_DELAY_MS).default(1_800_000),
   maxRequestImageBytes: z.number().step(1).min(1).default(20 * 1024 * 1024),
+  maxRequestImages: z.number().step(1).min(1).default(DEFAULT_MAX_REQUEST_IMAGES),
+  imageOffloadCountQuantum: z.number().step(1).min(1),
   requestImagePixelBudget: z.number().step(1).min(1).default(2048 * 2048),
   requestImageMaxBytes: z.number().step(1).min(1).default(1024 * 1024),
   retryPolicy: RetryPolicySchema,
 })
 
-/** {@link Config} after validation, with the retry policy resolved once. */
-export interface ResolvedConfig extends Omit<Config, 'retryPolicy' | 'baseURL'> {
+/** {@link Config} after validation, with the derived bounds and retry policy resolved once. */
+export interface ResolvedConfig extends Omit<Config, 'retryPolicy' | 'baseURL' | 'imageOffloadCountQuantum'> {
   /** Server origin, normalized to end without `/`. */
   baseURL: string
+  /** Count-overflow offload step, defaulted to the pi-ai default bounded by {@link Config.maxRequestImages}. */
+  imageOffloadCountQuantum: number
   /** Immutable retry policy captured with the route registration. */
   retryPolicy: ResolvedRetryPolicy
 }
@@ -99,9 +111,19 @@ export function resolveConfig(config: Config, environment: LaunchEnvironmentSnap
   if (url.protocol !== 'http:' && url.protocol !== 'https:') {
     throw new Error(`llm-llamacpp: ${source} "${origin}" must use http or https`)
   }
+  const { maxRequestImages } = config
+  const imageOffloadCountQuantum = config.imageOffloadCountQuantum
+    ?? Math.min(DEFAULT_IMAGE_OFFLOAD_COUNT_QUANTUM, maxRequestImages)
+  if (!Number.isSafeInteger(maxRequestImages) || maxRequestImages <= 0) {
+    throw new Error('llm-llamacpp: maxRequestImages must be a positive safe integer')
+  }
+  if (!Number.isSafeInteger(imageOffloadCountQuantum) || imageOffloadCountQuantum <= 0 || imageOffloadCountQuantum > maxRequestImages) {
+    throw new Error('llm-llamacpp: imageOffloadCountQuantum must be a positive safe integer no greater than maxRequestImages')
+  }
   const { retryPolicy, baseURL: _baseURL, ...rest } = config
   return {
     ...rest,
+    imageOffloadCountQuantum,
     baseURL: url.href.replace(/\/+$/, ''),
     retryPolicy: resolveRetryPolicy(retryPolicy, 'llm-llamacpp: retryPolicy'),
   }

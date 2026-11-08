@@ -50,6 +50,8 @@ The `llamacpp` provider route with one model, `loaded`, in every model selector.
 | `maxTokens` | `32768` | Output cap for a request that names none; clamped to the served context window. |
 | `streamIdleTimeoutMs` | `1800000` | Maximum silence while a stream read is outstanding. llama-server sends nothing while it evaluates the prompt, so this covers long prompt evaluation on slow hardware. |
 | `maxRequestImageBytes` | `20971520` | Base64 image payload per request; older images beyond it become text placeholders. |
+| `maxRequestImages` | `50` | Inline image occurrences per request; older images beyond it become text placeholders. |
+| `imageOffloadCountQuantum` | `10` | Images one count overflow offloads at once; omitted, it resolves to `min(10, maxRequestImages)`. |
 | `requestImagePixelBudget` | `4194304` | Total-pixel budget for each inline image. |
 | `requestImageMaxBytes` | `1048576` | Encoded-byte cap for each inline image. |
 | `retryPolicy` | normal, five retries | Provider-owned model-request retry policy. |

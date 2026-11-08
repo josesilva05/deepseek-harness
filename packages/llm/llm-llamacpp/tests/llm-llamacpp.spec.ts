@@ -206,4 +206,12 @@ describe('resolveConfig', () => {
     expect(resolveConfig(configOf({ baseURLEnv: 'MY_SERVER' }), envOf({ MY_SERVER: 'http://host:1234' })).baseURL).toBe('http://host:1234')
     expect(() => resolveConfig(configOf({}), envOf({ LLAMACPP_BASE_URL: 'ftp://x' }))).toThrow(/LLAMACPP_BASE_URL "ftp:\/\/x" must use http or https/)
   })
+
+  it('bounds the image offload quantum by the image count bound', () => {
+    expect(resolveConfig(configOf({}), envOf())).toMatchObject({ maxRequestImages: 50, imageOffloadCountQuantum: 10 })
+    expect(resolveConfig(configOf({ maxRequestImages: 4 }), envOf()).imageOffloadCountQuantum).toBe(4)
+    expect(resolveConfig(configOf({ maxRequestImages: 4, imageOffloadCountQuantum: 3 }), envOf()).imageOffloadCountQuantum).toBe(3)
+    expect(() => resolveConfig(configOf({ maxRequestImages: 4, imageOffloadCountQuantum: 5 }), envOf()))
+      .toThrow(/imageOffloadCountQuantum must be a positive safe integer no greater than maxRequestImages/)
+  })
 })

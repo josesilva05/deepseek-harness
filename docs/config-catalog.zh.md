@@ -744,6 +744,23 @@ export interface Config {
 ```
 <!-- END GENERATED config-catalog:@deepseek-ai/dsh-client-ui-trajectory -->
 
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-command-llamacpp -->
+<a id="deepseek-aidsh-command-llamacpp"></a>
+
+## `@deepseek-ai/dsh-command-llamacpp`
+
+- `inject`: `commands` · `llm`
+- `source`: [`packages/llm/command-llamacpp/src/index.ts:28`](../packages/llm/command-llamacpp/src/index.ts)
+
+```ts config-catalog
+/** Plugin configuration. */
+export interface Config {
+  /** Provider route the command describes. */
+  route: string
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-command-llamacpp -->
+
 <!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-compaction-basic -->
 <a id="deepseek-aidsh-compaction-basic"></a>
 
@@ -1416,6 +1433,65 @@ export interface Config {
 ```
 <!-- END GENERATED config-catalog:@deepseek-ai/dsh-experimental-speech-to-text-sensevoice -->
 
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-experimental-speech-to-text-whisper -->
+<a id="deepseek-aidsh-experimental-speech-to-text-whisper"></a>
+
+## `@deepseek-ai/dsh-experimental-speech-to-text-whisper`
+
+- `inject`: `speechToText` · `subprocess`
+- `source`: [`packages/experimental/speech-to-text-whisper/src/config.ts:6`](../packages/experimental/speech-to-text-whisper/src/config.ts)
+
+```ts config-catalog
+/** Local runtime, inference, and retention settings. */
+export interface Config {
+  /** Unique registration id; consumers select this exact id. */
+  providerId: string
+  /** Absolute directory for verified ONNX models. */
+  dataRoot: string
+  /** Existing directory containing the selected ONNX model files and tokens.txt; omission downloads verified files. */
+  modelDirectory?: string | undefined
+  /** Existing Silero VAD ONNX file; omission downloads the verified model. */
+  vadModelPath?: string | undefined
+  /** Weight precision; INT8 minimizes first-use download and model storage. */
+  precision: 'int8' | 'fp32'
+  /** Explicit Hugging Face-compatible origin; bypasses automatic selection and public fallback. */
+  modelOrigin?: string | undefined
+  /** Hugging Face-compatible origins compared before downloading each missing asset. */
+  modelOrigins: string[]
+  /** Deadline for concurrent HEAD probes, including redirects to the actual asset. */
+  modelProbeTimeoutMs: number
+  /** CPU intra-operation thread count. */
+  threads: number
+  /** Maximum speech segment length passed to the recognizer. */
+  segmentSeconds: number
+  /** Silero speech probability threshold. */
+  vadThreshold: number
+  /** Minimum speech duration retained by VAD. */
+  minSpeechSeconds: number
+  /** Silence separating two speech segments. */
+  minSilenceSeconds: number
+  /** Maximum decoded WAV bytes accepted by the private worker. */
+  maxAudioBytes: number
+  /** Deadline for runtime preparation and cold model loading. */
+  prepareTimeoutMs: number
+  /** Deadline for one inference after the worker is ready. */
+  inferenceTimeoutMs: number
+  /** Idle period before stopping the worker; zero keeps it warm. */
+  idleTimeoutMs: number
+  /** Maximum accepted running and waiting transcriptions. */
+  maxPending: number
+  /** Managed process termination grace period. */
+  graceMs: number
+  /** Maximum retained worker diagnostic bytes. */
+  maxLogBytes: number
+  /** Maximum transcript response bytes. */
+  maxResponseBytes: number
+  /** Minimum interval between intermediate download progress notifications. */
+  progressIntervalMs: number
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-experimental-speech-to-text-whisper -->
+
 <!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-experimental-subagent-oar -->
 <a id="deepseek-aidsh-experimental-subagent-oar"></a>
 
@@ -1946,6 +2022,58 @@ export interface Config extends ProtocolConfig, ModelListingConfig {
 }
 ```
 <!-- END GENERATED config-catalog:@deepseek-ai/dsh-llm-deepseek-api-key -->
+
+<!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-llm-llamacpp -->
+<a id="deepseek-aidsh-llm-llamacpp"></a>
+
+## `@deepseek-ai/dsh-llm-llamacpp`
+
+- `inject`: `llm`
+- `refs`: [`RetryPolicyConfig`](../packages/llm/llm/src/index.ts)
+- `source`: [`packages/llm/llm-llamacpp/src/config.ts:25`](../packages/llm/llm-llamacpp/src/config.ts)
+
+```ts config-catalog
+/** Plugin configuration for one llama-server route. */
+export interface Config {
+  /** Harness provider route this plugin registers. */
+  route: string
+  /** Name selectors show for the route. */
+  displayName: string
+  /** Server origin without the `/v1` suffix; omission reads {@link Config.baseURLEnv}, then llama-server's default address. */
+  baseURL?: string
+  /** Environment variable naming the server origin when `baseURL` is omitted; a launcher sets it for the server it started. */
+  baseURLEnv: string
+  /**
+   * Bearer token for a server started with `--api-key`. Omit it for a server
+   * without one; the request then carries a fixed placeholder, because the
+   * OpenAI-compatible client refuses to send an unauthenticated request.
+   */
+  apiKey?: string
+  /** Upper bound for one `GET /props` probe. */
+  probeTimeoutMs: number
+  /** Per-request output cap sent when a request names none; clamped to the served context window. */
+  maxTokens: number
+  /**
+   * Maximum silence while one stream read is outstanding. llama-server sends
+   * nothing while it evaluates the prompt, so this must cover the longest
+   * prompt evaluation the deployment expects.
+   */
+  streamIdleTimeoutMs: number
+  /** Maximum base64 image payload per request; the oldest images beyond it become text placeholders. */
+  maxRequestImageBytes: number
+  /** Inline image occurrences per request; the oldest beyond it become text placeholders. */
+  maxRequestImages: number
+  /** Count-overflow offload step; omission resolves to the pi-ai default bounded by {@link Config.maxRequestImages}. */
+  imageOffloadCountQuantum?: number
+  /** Total-pixel budget each inline image is downscaled to. */
+  requestImagePixelBudget: number
+  /** Raw encoded-byte cap for each inline image. */
+  requestImageMaxBytes: number
+  /** Provider-owned model-request retry policy. */
+  retryPolicy?: RetryPolicyConfig
+}
+```
+<!-- END GENERATED config-catalog:@deepseek-ai/dsh-llm-llamacpp -->
 
 <!-- BEGIN GENERATED config-catalog:@deepseek-ai/dsh-llm-pi-ai -->
 <a id="deepseek-aidsh-llm-pi-ai"></a>
