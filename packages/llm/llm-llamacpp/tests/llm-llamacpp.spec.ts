@@ -248,4 +248,12 @@ describe('resolveConfig', () => {
   it('prefixes configuration errors with the plugin that resolves them', () => {
     expect(() => resolveConfig(configOf({ baseURL: 'not a url' }), envOf(), 'llm-localcode')).toThrow(/^llm-localcode: baseURL "not a url" is not a URL/)
   })
+
+  it('bounds the image offload quantum by the image count bound', () => {
+    expect(resolveConfig(configOf({}), envOf())).toMatchObject({ maxRequestImages: 50, imageOffloadCountQuantum: 10 })
+    expect(resolveConfig(configOf({ maxRequestImages: 4 }), envOf()).imageOffloadCountQuantum).toBe(4)
+    expect(resolveConfig(configOf({ maxRequestImages: 4, imageOffloadCountQuantum: 3 }), envOf()).imageOffloadCountQuantum).toBe(3)
+    expect(() => resolveConfig(configOf({ maxRequestImages: 4, imageOffloadCountQuantum: 5 }), envOf()))
+      .toThrow(/imageOffloadCountQuantum must be a positive safe integer no greater than maxRequestImages/)
+  })
 })

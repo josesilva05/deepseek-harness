@@ -50,6 +50,8 @@ dsh plugin --profile web add ./packages/llm/llm-llamacpp
 | `maxTokens` | `32768` | 请求未指定时的输出上限；不超过服务器的上下文窗口。 |
 | `streamIdleTimeoutMs` | `1800000` | 流读取期间允许的最长静默。llama-server 在评估提示时不发送任何内容，因此该值需覆盖慢速硬件上的长提示评估。 |
 | `maxRequestImageBytes` | `20971520` | 每个请求的 base64 图像负载；超出部分的较早图像被替换为文本占位。 |
+| `maxRequestImages` | `50` | 每个请求的内联图像数量上限；超出部分的较早图像被替换为文本占位。 |
+| `imageOffloadCountQuantum` | `10` | 单次数量溢出时卸载的图像数；省略时解析为 `min(10, maxRequestImages)`。 |
 | `requestImagePixelBudget` | `4194304` | 每张内联图像的总像素预算。 |
 | `requestImageMaxBytes` | `1048576` | 每张内联图像的编码字节上限。 |
 | `retryPolicy` | normal，五次重试 | 提供方自有的模型请求重试策略。 |

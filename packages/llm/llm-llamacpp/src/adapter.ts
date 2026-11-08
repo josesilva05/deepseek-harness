@@ -128,6 +128,8 @@ export class LlamaCppAdapter extends LlmAdapter {
       baseURL: baseUrl,
       streamIdleTimeoutMs: config.streamIdleTimeoutMs,
       maxRequestImageBytes: config.maxRequestImageBytes,
+      maxRequestImages: config.maxRequestImages,
+      imageOffloadCountQuantum: config.imageOffloadCountQuantum,
       requestImagePixelBudget: config.requestImagePixelBudget,
       requestImageMaxBytes: config.requestImageMaxBytes,
       retryPolicy: config.retryPolicy,
